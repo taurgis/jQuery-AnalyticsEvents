@@ -73,7 +73,7 @@ EasyAnalyticsEvents = {
         'nonInteraction': eventArguments.nonInteraction
       });
     } else {
-      throw new Error('No Google Analytics script found.')
+      throw new Error('No Google Analytics script found.');
     }
 
     if (options.debug) {
