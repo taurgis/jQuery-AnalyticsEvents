@@ -1,7 +1,7 @@
 # jQuery-AnalyticsEvents
 An simple HTML5 solution to quickly send events to Google Analytics without having to write any Javascript Code.
 
-## Examples
+## Examples HTML
 ```html
 <script  type="text/javascript">
   EasyAnalyticsEvents.init( {debug: true} );
@@ -16,4 +16,10 @@ An simple HTML5 solution to quickly send events to Google Analytics without havi
 
 ```html
 <input type="button" class="analytics-event-click" data-ga-category="Category" data-ga-action="Action" data-ga-label="Label" data-ga-value="Value" />
+```
+
+## Examples JS
+
+```javascript
+EasyAnalyticsEvents.track({ category: 'Category', action: 'Action', label: 'Label' } );
 ```
