@@ -67,7 +67,7 @@ EasyAnalyticsEvents = {
     eventArguments = $.extend(defaultEventArguments, eventArguments);
 
     if (_gaq) {
-      _gaq.push(['_trackEvent', eventArguments.category, eventArguments.action, eventArguments.label, eventArguments.value, args.nonInteraction]);
+      _gaq.push(['_trackEvent', eventArguments.category, eventArguments.action, eventArguments.label, eventArguments.value, eventArguments.nonInteraction]);
     } else if (ga) {
       ga('send', 'event', eventArguments.category, eventArguments.action, eventArguments.label, eventArguments.value, {
         'nonInteraction': eventArguments.nonInteraction
