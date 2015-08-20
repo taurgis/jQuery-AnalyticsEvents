@@ -29,6 +29,7 @@ EasyAnalyticsEvents = {
   defaultOptions: {
     clickClass: "analytics-event-click",
     displayClass: "analytics-event-display",
+    changeClass: "analytics-event-change",
 
     categoryAttribute: 'data-ga-category',
     actionAttribute: 'data-ga-action',
@@ -48,6 +49,14 @@ EasyAnalyticsEvents = {
     }
 
     $("." + options.clickClass).on('click', {
+      options: options
+    }, function(event) {
+      var _this = $(this);
+
+      EasyAnalyticsEvents.track(EasyAnalyticsEvents.createArgs(_this, event.data.options), event.data.options);
+    });
+
+    $("." + options.changeClass).on('change', {
       options: options
     }, function(event) {
       var _this = $(this);
@@ -88,15 +97,34 @@ EasyAnalyticsEvents = {
     var category = element.attr(options.categoryAttribute);
     var action = element.attr(options.actionAttribute);
     var label = element.attr(options.labelAttribute);
-    var value = (element.is(':checkbox')) ? (element.is(':checked') ? element.attr(options.checkedCheckboxValueAttribute) : element.attr(options.valueAttribute)) : element.attr(options.valueAttribute);
+    var value;
+    switch (element.get(0).tagName) {
+      case 'INPUT':
+        switch (element.attr('type')) {
+          case 'checkbox':
+            value = element.is(':checked') ? element.attr(options.checkedCheckboxValueAttribute) : element.attr(options.valueAttribute);
+            break;
+          default:
+            value = element.attr(options.valueAttribute);
+        }
+        break;
+      case 'SELECT':
+        value = element.find('option:selected').attr(options.valueAttribute);
+        break;
+      default:
+        value = element.attr(options.valueAttribute);
+    }
+
     var nonInteraction = (element.attr(options.noninteractionAttribute) === 'true');
 
-    return args = {
+    var args = {
       category: category,
       action: action,
       label: label,
       value: value,
       nonInteraction: nonInteraction
     };
+
+    return args;
   }
 };
