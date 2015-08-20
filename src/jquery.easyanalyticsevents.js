@@ -1,6 +1,5 @@
 /*
- * jQuery Easy Analytics Events
- * https://github.com/taurgis/jQuery-EasyAnalyticsEvents
+ * jQuery Easy Analytics Events v1.1.0 (https://github.com/taurgis/jQuery-EasyAnalyticsEvents)
  *
  * Copyright 2014, Thomas Theunen
  * https://www.thomastheunen.eu
@@ -21,6 +20,10 @@
  *
  * 	<input type="button" class="analytics-event-click" data-ga-category="Category" data-ga-action="Action" data-ga-label="Label" data-ga-value="Value" />
  */
+
+if (typeof jQuery === 'undefined') {
+  throw new Error('Easy Analytics Events\'s JavaScript requires jQuery')
+}
 
 EasyAnalyticsEvents = {
   defaultOptions: {
@@ -73,10 +76,10 @@ EasyAnalyticsEvents = {
         'nonInteraction': eventArguments.nonInteraction
       });
     } else {
-      throw new Error('No Google Analytics script found.');
+      throw new Error('No Google Analytics script found.')
     }
 
-    if (options.debug) {
+    if (options && options.debug) {
       console.log("Sending analytics event: ", eventArguments);
     }
   },
@@ -88,14 +91,12 @@ EasyAnalyticsEvents = {
     var value = (element.is(':checkbox')) ? (element.is(':checked') ? element.attr(options.checkedCheckboxValueAttribute) : element.attr(options.valueAttribute)) : element.attr(options.valueAttribute);
     var nonInteraction = (element.attr(options.noninteractionAttribute) === 'true');
 
-    var args = {
+    return args = {
       category: category,
       action: action,
       label: label,
       value: value,
       nonInteraction: nonInteraction
     };
-		
-    return args;
   }
 };
