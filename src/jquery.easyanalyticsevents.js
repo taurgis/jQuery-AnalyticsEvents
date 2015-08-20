@@ -70,7 +70,7 @@ EasyAnalyticsEvents = {
       _gaq.push(['_trackEvent', eventArguments.category, eventArguments.action, eventArguments.label, eventArguments.value, args.nonInteraction]);
     } else if (ga) {
       ga('send', 'event', eventArguments.category, eventArguments.action, eventArguments.label, eventArguments.value, {
-        'nonInteraction': args.nonInteraction
+        'nonInteraction': eventArguments.nonInteraction
       });
     } else {
       throw new Error('No Google Analytics script found.')
