@@ -22,24 +22,31 @@
     <option data-ga-value="C-value" value="C-value">C</option>
   </select>
 </p>
+<p>
+  <input type="button" class="analytics-event-click" data-ga-category="Category" data-ga-action="Action" data-ga-label="Label" data-ga-value="Value" data-ga-perpetual="false" value="Perpetual Disabled Button" />
+</p>
+<p>
+  <form action="#"  class="analytics-event-submit" data-ga-category="Submit category" data-ga-action="Submit action">
+    <input type="submit" />
+  </form>
 
-<body>
+  <body>
 
 
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    EasyAnalyticsEvents.init({
-      debug: true
-    });
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      EasyAnalyticsEvents.init({
+        debug: true
+      });
 
-    EasyAnalyticsEvents.track({
-      category: 'Javascript',
-      action: 'Track',
-      label: 'Event'
-    }, {
-      debug: true
-    });
-  </script>
-</body>
+      EasyAnalyticsEvents.track({
+        category: 'Javascript',
+        action: 'Track',
+        label: 'Event'
+      }, {
+        debug: true
+      });
+    </script>
+  </body>
 
 </html>

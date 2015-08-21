@@ -1,5 +1,5 @@
 /*
- * jQuery Easy Analytics Events v1.1.0 (https://github.com/taurgis/jQuery-EasyAnalyticsEvents)
+ * jQuery Easy Analytics Events v1.2.0 (https://github.com/taurgis/jQuery-EasyAnalyticsEvents)
  *
  * Copyright 2014, Thomas Theunen
  * https://www.thomastheunen.eu
@@ -25,58 +25,75 @@ if (typeof jQuery === 'undefined') {
   throw new Error('Easy Analytics Events\'s JavaScript requires jQuery')
 }
 
-EasyAnalyticsEvents = {
+var EasyAnalyticsEvents = {
   defaultOptions: {
-    clickClass: "analytics-event-click",
-    displayClass: "analytics-event-display",
-    changeClass: "analytics-event-change",
+    clickClass: 'analytics-event-click',
+    displayClass: 'analytics-event-display',
+    changeClass: 'analytics-event-change',
+    submitClass: 'analytics-event-submit',
 
     categoryAttribute: 'data-ga-category',
     actionAttribute: 'data-ga-action',
     labelAttribute: 'data-ga-label',
     valueAttribute: 'data-ga-value',
+    perpetualAttribute: 'data-ga-perpetual',
     checkedCheckboxValueAttribute: 'data-ga-checked-value',
     noninteractionAttribute: 'data-ga-noninteraction',
 
     debug: false
   },
 
-  init: function(options) {
+  init: function (options) {
     options = $.extend({}, this.defaultOptions, options);
 
     if (options.debug) {
       console.log("Current options:", options);
     }
 
-    $("." + options.clickClass).on('click', {
-      options: options
-    }, function(event) {
-      var _this = $(this);
-
-      EasyAnalyticsEvents.track(EasyAnalyticsEvents.createArgs(_this, event.data.options), event.data.options);
-    });
-
-    $("." + options.changeClass).on('change', {
-      options: options
-    }, function(event) {
-      var _this = $(this);
-
-      EasyAnalyticsEvents.track(EasyAnalyticsEvents.createArgs(_this, event.data.options), event.data.options);
-    });
+    this.initializeElementEvents(options);
 
     $('.' + options.displayClass).each(function(index) {
       EasyAnalyticsEvents.track(EasyAnalyticsEvents.createArgs($(this), options), options);
     });
   },
 
+  initializeElementEvents: function(options) {
+    $("." + options.clickClass).on('click', {
+      options: options
+    }, this.trackElement);
+
+    $("." + options.changeClass).on('change', {
+      options: options
+    }, this.trackElement);
+
+    $("." + options.submitClass).on('submit', {
+      options: options
+    }, this.trackElement);
+  },
+
+  trackElement: function(event) {
+    var _this = $(this);
+
+    EasyAnalyticsEvents.track(EasyAnalyticsEvents.createArgs(_this, event.data.options), event.data.options);
+  },
+
   track: function(eventArguments, options) {
     var defaultEventArguments = {
       category: 'N/A',
       action: 'N/A',
-      nonInteraction: false
+      nonInteraction: false,
+      perpetual: true
     };
 
     eventArguments = $.extend(defaultEventArguments, eventArguments);
+
+    if (eventArguments.sourceElement && eventArguments.sourceElement.data('eventFired') === 'true') {
+      return;
+    }
+
+    if (!eventArguments.perpetual && eventArguments.sourceElement) {
+      eventArguments.sourceElement.data('eventFired', 'true');
+    }
 
     if (_gaq) {
       _gaq.push(['_trackEvent', eventArguments.category, eventArguments.action, eventArguments.label, eventArguments.value, eventArguments.nonInteraction]);
@@ -116,13 +133,16 @@ EasyAnalyticsEvents = {
     }
 
     var nonInteraction = (element.attr(options.noninteractionAttribute) === 'true');
+    var perpetual = (element.attr(options.perpetualAttribute)) ? (element.attr(options.perpetualAttribute) === 'true') : true;
 
     var args = {
       category: category,
       action: action,
       label: label,
       value: value,
-      nonInteraction: nonInteraction
+      nonInteraction: nonInteraction,
+      perpetual: perpetual,
+      sourceElement: element
     };
 
     return args;
