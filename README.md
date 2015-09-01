@@ -1,6 +1,8 @@
 # jQuery-AnalyticsEvents
 An simple HTML5 solution to quickly send events to Google Analytics without having to write any Javascript Code.
 
+<a href="https://codeclimate.com/github/taurgis/jQuery-EasyAnalyticsEvents"><img src="https://codeclimate.com/github/taurgis/jQuery-EasyAnalyticsEvents/badges/gpa.svg" /></a>
+
 ## Examples HTML
 
 ### Initialization
